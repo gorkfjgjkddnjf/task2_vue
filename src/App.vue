@@ -16,32 +16,19 @@
 </template>
 
 <script>
-  import signin from './json/signin.json'               //
-  import signup from './json/signup.json'               //
-  import color from './json/colorsheme.json'            // ОЧЕНЬ ПЛОХО
-  import addpost from './json/addpost.json'             //
-  import interview from './json/interview.json'         //
-  //import { mapActions} from 'vuex'
+
 import Inputmask from 'inputmask'
   export default {
     name: 'App',
     data() {
       return {
-        //requestURL: './json/signin.json'
-        data1: signin
+        requestURL: './json/signin.json',
       }
     },
-    components: {
-    },
-    // methods:{
-    //   ...mapActions([
-    //     'GET_JSON'
-    //   ])
-    // },
-    // mounted(){
-    //   this.GET_JSON()
-    // }
+    components: {},
+
     methods: {
+
       buildWrapper(fields) {
 
         let formGroup = document.createElement('div');
@@ -60,19 +47,28 @@ import Inputmask from 'inputmask'
         return formGroup;
 
       },
-      buildForm(data) {
-        let mainContainer = document.querySelector('#main-container');
-        let form = document.createElement('form');
+      
+      buildForm(requestURL) {
+        import(`${requestURL}`)
+        .then(data =>{
+          let mainContainer = document.querySelector('#main-container');
+          let form = document.createElement('form');
 
-        form.setAttribute('role', 'form');
-        form.setAttribute('name', data.name);
-        this.buildFields(data, form);
-        this.buildRef(data, form);
-        this.buildButtons(data, form);
-        this.buildLink(form)
-        mainContainer.append(form);
+          form.setAttribute('role', 'form');
+          form.setAttribute('name', data.name);
+          this.buildFields(data, form);
+          this.buildRef(data, form);
+          this.buildButtons(data, form);
+          this.buildLink(form)
+          mainContainer.append(form);
 
-        this.buildMask(data);
+          this.buildMask(data);
+      })
+      .catch(err => {
+        alert('WTF')
+        console.log(err)
+      })
+        
       },
       buildFields(jsonObj, form) {
         let vm = this
@@ -213,14 +209,9 @@ import Inputmask from 'inputmask'
 
             a.addEventListener('click', {
               handleEvent() {
-                if(a.name == 'signup'){
-                  form.remove();
-                  vm.buildForm(signup);
-                }
-                else{
-                  form.remove();
-                  vm.buildForm(signin);
-                }
+                form.remove();
+                vm.requestURL = './json/' + a.name + '.json';
+                vm.buildForm(vm.requestURL);
               }
             });
 
@@ -329,31 +320,30 @@ import Inputmask from 'inputmask'
         let link4 = document.querySelector('#link4');
         link0.onclick = function () {
 
-          //requestURL = 'js/json/signin.json';
+          vm.requestURL = './json/signin.json';
           form.remove();
-          vm.buildForm(signin);
+          vm.buildForm(vm.requestURL);
         }
         link1.onclick = function () {
-          //requestURL = 'js/json/signup.json';
+          vm.requestURL = './json/signup.json';
           form.remove();
-          vm.buildForm(signup);
+          vm.buildForm(vm.requestURL);
 
         }
         link2.onclick = function () {
-          //requestURL = 'js/json/colorsheme.json';
+          vm.requestURL = './json/colorsheme.json';
           form.remove();
-          vm.buildForm(color);
+          vm.buildForm(vm.requestURL);
         }
         link3.onclick = function () {
-          //requestURL = 'js/json/addpost.json';
+          vm.requestURL = './json/addpost.json';
           form.remove();
-          vm.buildForm(addpost);
+          vm.buildForm(vm.requestURL);
         }
         link4.onclick = function () {
-          //requestURL = 'js/json/interview.json';
+          vm.requestURL = './json/interview.json';
           form.remove();
-          console.log(1)
-          vm.buildForm(interview);
+          vm.buildForm(vm.requestURL);
         }
       },
       buildMask(jsonObj){
@@ -370,11 +360,12 @@ import Inputmask from 'inputmask'
     },
 
     mounted() {
-      this.buildForm(this.data1)
+      //this.GET_JSON()
+      this.buildForm(this.requestURL)
     }
   }
 </script>
 
 <style lang='sass'>
-
+  
 </style>
