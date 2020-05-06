@@ -6,7 +6,10 @@
         <h1 class=" text-center">Вы ввели:</h1>
         <ul class="ul">
           <li v-for="data in filteredData" :key="data.id">{{data}}</li>
-        </ul>       
+        </ul> 
+        <div class="col-12 image">
+          
+        </div>      
       </div>
     </div>
   </div>
@@ -34,12 +37,12 @@ export default {
 
           if(data.name){
             let img = document.createElement('img')
-            let block = document.querySelector('.saved-data')
+            let block = document.querySelector('.image')
 
             new Promise((resolve) => {
               img.alt = 'your Photo'
               img.id = 'test' + i
-              img.className = 'mb-3'
+              img.className = 'mb-3 img-fluid'
               block.append(img) 
               resolve()          
             })
@@ -72,8 +75,4 @@ export default {
 <style lang="sass">
 .save
   font-size: 24px
-
-img
-  width: 350px
-  height: 150px
 </style>

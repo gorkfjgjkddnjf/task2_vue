@@ -15,11 +15,7 @@
       </router-link>
     </div>
   </div>
-      <!-- <div class="custom-file">
-        <input type="file" class="custom-file-input" id="customFile" @change="previewFile">
-        <label class="custom-file-label" for="customFile">Choose file</label>
-      </div>
-    <img src="" height="200" alt="Image preview..."> -->
+
 </div>
     
 </template>
@@ -39,9 +35,12 @@ import Inputmask from 'inputmask'
 
     methods: {
       getInputData(){
-        let tmp = document.querySelectorAll('input')
-
-        tmp.forEach(element => {
+        let input = document.querySelectorAll('input')
+        let textarea = document.querySelector('textarea')
+        if(textarea.value != ''){
+          this.inputData.push(textarea.value)
+        }
+        input.forEach(element => {
           if(element.type == 'file' && element.files[0] != undefined){
             this.inputData.push(element.files[0])
           }
