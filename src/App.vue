@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container">
-    <div class="row justify-content-center align-items-center h-100">
+    <!-- <div class="row justify-content-center align-items-center h-100">
             <div class="col-12 col-sm-8 col-lg-8 col-xl-6" id="main-container">
 
             </div>
@@ -11,13 +11,14 @@
                 <a href="#" class="btn btn-primary w-100 my-2" id="link3" >addpost.json</a>
                 <a href="#" class="btn btn-primary w-100 my-2" id="link4" >interview.json</a>
             </div>
-        </div>
+        </div> -->
+        <router-view/>
   </div>
 </template>
 
 <script>
 
-import Inputmask from 'inputmask'
+//import Inputmask from 'inputmask'
   export default {
     name: 'App',
     data() {
@@ -27,342 +28,342 @@ import Inputmask from 'inputmask'
     },
     components: {},
 
-    methods: {
+    // methods: {
 
-      buildWrapper(fields) {
+    //   buildWrapper(fields) {
 
-        let formGroup = document.createElement('div');
+    //     let formGroup = document.createElement('div');
 
-        formGroup.className = 'form-group';
-        if (fields.input.type == 'file') {
-          formGroup.className = 'custom-file my-2';
-        }
-        if (fields.input.type == 'technology') {
-          formGroup.className = 'btn-group-toggle';
-          formGroup.setAttribute('data-toggle', 'buttons')
-        }
-        if (fields.input.type == 'checkbox') {
-          formGroup.className = 'form-check';
-        }
-        return formGroup;
+    //     formGroup.className = 'form-group';
+    //     if (fields.input.type == 'file') {
+    //       formGroup.className = 'custom-file my-2';
+    //     }
+    //     if (fields.input.type == 'technology') {
+    //       formGroup.className = 'btn-group-toggle';
+    //       formGroup.setAttribute('data-toggle', 'buttons')
+    //     }
+    //     if (fields.input.type == 'checkbox') {
+    //       formGroup.className = 'form-check';
+    //     }
+    //     return formGroup;
 
-      },
+    //   },
       
-      buildForm(requestURL) {
-        import(`${requestURL}`)
-        .then(data =>{
-          let mainContainer = document.querySelector('#main-container');
-          let form = document.createElement('form');
+    //   buildForm(requestURL) {
+    //     import(`${requestURL}`)
+    //     .then(data =>{
+    //       let mainContainer = document.querySelector('#main-container');
+    //       let form = document.createElement('form');
 
-          form.setAttribute('role', 'form');
-          form.setAttribute('name', data.name);
-          this.buildFields(data, form);
-          this.buildRef(data, form);
-          this.buildButtons(data, form);
-          this.buildLink(form)
-          mainContainer.append(form);
+    //       form.setAttribute('role', 'form');
+    //       form.setAttribute('name', data.name);
+    //       this.buildFields(data, form);
+    //       this.buildRef(data, form);
+    //       this.buildButtons(data, form);
+    //       this.buildLink(form)
+    //       mainContainer.append(form);
 
-          this.buildMask(data);
-      })
-      .catch(err => {
-        alert('WTF')
-        console.log(err)
-      })
+    //       this.buildMask(data);
+    //   })
+    //   .catch(err => {
+    //     alert('WTF')
+    //     console.log(err)
+    //   })
         
-      },
-      buildFields(jsonObj, form) {
-        let vm = this
-        jsonObj.fields.forEach(function (fields, i) {
-          let wrapper = vm.buildWrapper(fields);
-          if (fields.input.type == 'technology') {
+    //   },
+    //   buildFields(jsonObj, form) {
+    //     let vm = this
+    //     jsonObj.fields.forEach(function (fields, i) {
+    //       let wrapper = vm.buildWrapper(fields);
+    //       if (fields.input.type == 'technology') {
 
-            wrapper.append(vm.buildLabel(fields, i));
+    //         wrapper.append(vm.buildLabel(fields, i));
 
-            fields.input.technologies.forEach((techelem, i) => wrapper.append(vm.buildTechnology(techelem, i)));
+    //         fields.input.technologies.forEach((techelem, i) => wrapper.append(vm.buildTechnology(techelem, i)));
 
-          } else if (fields.input.type == 'checkbox') {
-            wrapper.append(vm.buildInput(fields, i), vm.buildLabel(fields, i));
-          } else {
-            wrapper.append(vm.buildLabel(fields, i), vm.buildInput(fields, i));
-          }
+    //       } else if (fields.input.type == 'checkbox') {
+    //         wrapper.append(vm.buildInput(fields, i), vm.buildLabel(fields, i));
+    //       } else {
+    //         wrapper.append(vm.buildLabel(fields, i), vm.buildInput(fields, i));
+    //       }
 
-          form.append(wrapper);
-        });
-      },
-      buildInput(fields, i) {
-        let input = document.createElement('input');
+    //       form.append(wrapper);
+    //     });
+    //   },
+    //   buildInput(fields, i) {
+    //     let input = document.createElement('input');
 
-        input.type = fields.input.type;
-        input.id = 'test' + i;
-        if (fields.input.type == 'file') {
-          input.className = 'custom-file-input';
-        }
-        if (fields.input.type != 'checkbox') {
-          input.className = 'form-control form-control-lg';
-        } else {
-          input.className = 'form-check-input check';
-          if (fields.input.checked == 'false') {
-            input.checked = false;
-          } else {
-            input.checked = true;
-          }
-          input.id = 'check' + i;
-          input.addEventListener("click", this.backToDefaultColor);
-        }
+    //     input.type = fields.input.type;
+    //     input.id = 'test' + i;
+    //     if (fields.input.type == 'file') {
+    //       input.className = 'custom-file-input';
+    //     }
+    //     if (fields.input.type != 'checkbox') {
+    //       input.className = 'form-control form-control-lg';
+    //     } else {
+    //       input.className = 'form-check-input check';
+    //       if (fields.input.checked == 'false') {
+    //         input.checked = false;
+    //       } else {
+    //         input.checked = true;
+    //       }
+    //       input.id = 'check' + i;
+    //       input.addEventListener("click", this.backToDefaultColor);
+    //     }
 
-        if (fields.input.required != undefined) {
-          input.required = fields.input.required;
-        }
-        if (fields.input.placeholder != undefined) {
-          input.placeholder = fields.input.placeholder;
-        }
-        if (fields.input.type == 'color') {
-          this.buildDatalist(fields, i, input);
-          input.addEventListener("input", this.changeColor);
-        }
+    //     if (fields.input.required != undefined) {
+    //       input.required = fields.input.required;
+    //     }
+    //     if (fields.input.placeholder != undefined) {
+    //       input.placeholder = fields.input.placeholder;
+    //     }
+    //     if (fields.input.type == 'color') {
+    //       this.buildDatalist(fields, i, input);
+    //       input.addEventListener("input", this.changeColor);
+    //     }
 
-        if (fields.input.type == 'textarea') {
+    //     if (fields.input.type == 'textarea') {
 
-          input.remove();
+    //       input.remove();
 
-          let textarea = document.createElement('textarea');
+    //       let textarea = document.createElement('textarea');
 
-          textarea.required = fields.input.required;
-          textarea.className = input.className;
-          textarea.id = 'test' + i;
+    //       textarea.required = fields.input.required;
+    //       textarea.className = input.className;
+    //       textarea.id = 'test' + i;
 
-          return textarea;
-        }
+    //       return textarea;
+    //     }
 
-        this.buildInputFile(fields, input);
-        return input;
-      },
-      buildLabel(fields, i) {
-        if (fields.label != undefined) {
-          let label = document.createElement('label');
-          label.htmlFor = 'test' + i;
-          label.textContent = fields.label;
-          if (fields.input.type == 'checkbox') {
-            label.className = 'form-check-label';
-          }
-          if (fields.input.type == 'file') {
-            label.className = 'custom-file-label';
-          }
-          if (fields.input.type == 'technology') {
-            let col = document.createElement('div');
-            col.className = 'col pl-0';
-            col.append(label);
-            return col;
-          }
-          return label;
-        } else {
-          return '';
-        }
-      },
-      buildButtons(jsonObj, form) {
-        if (jsonObj.buttons != undefined) {
+    //     this.buildInputFile(fields, input);
+    //     return input;
+    //   },
+    //   buildLabel(fields, i) {
+    //     if (fields.label != undefined) {
+    //       let label = document.createElement('label');
+    //       label.htmlFor = 'test' + i;
+    //       label.textContent = fields.label;
+    //       if (fields.input.type == 'checkbox') {
+    //         label.className = 'form-check-label';
+    //       }
+    //       if (fields.input.type == 'file') {
+    //         label.className = 'custom-file-label';
+    //       }
+    //       if (fields.input.type == 'technology') {
+    //         let col = document.createElement('div');
+    //         col.className = 'col pl-0';
+    //         col.append(label);
+    //         return col;
+    //       }
+    //       return label;
+    //     } else {
+    //       return '';
+    //     }
+    //   },
+    //   buildButtons(jsonObj, form) {
+    //     if (jsonObj.buttons != undefined) {
 
-          let row = document.createElement('div');
-          row.className = 'row justify-content-center mt-4';
+    //       let row = document.createElement('div');
+    //       row.className = 'row justify-content-center mt-4';
 
-          jsonObj.buttons.forEach(function (buttons) {
+    //       jsonObj.buttons.forEach(function (buttons) {
 
-            let col = document.createElement('div');
-            let btn = document.createElement('input');
+    //         let col = document.createElement('div');
+    //         let btn = document.createElement('input');
 
-            col.className = 'col-6 col-sm-6 col-md-6';
-            btn.className = 'btn btn-primary w-100 mb-5';
+    //         col.className = 'col-6 col-sm-6 col-md-6';
+    //         btn.className = 'btn btn-primary w-100 mb-5';
 
-            btn.type = 'submit';
-            btn.value = buttons.text;
+    //         btn.type = 'submit';
+    //         btn.value = buttons.text;
 
-            col.append(btn);
-            row.append(col);
+    //         col.append(btn);
+    //         row.append(col);
 
-          });
+    //       });
 
-          form.append(row)
+    //       form.append(row)
 
-        }
-      },
-      buildRef(jsonObj, form) {
-        let vm = this
-        if (jsonObj.references != undefined) {
-          let row = document.createElement('div');
-          row.className = 'row justify-content-between';
+    //     }
+    //   },
+    //   buildRef(jsonObj, form) {
+    //     let vm = this
+    //     if (jsonObj.references != undefined) {
+    //       let row = document.createElement('div');
+    //       row.className = 'row justify-content-between';
 
-          jsonObj.references.forEach(function (references, i) {
+    //       jsonObj.references.forEach(function (references, i) {
 
-            let p = document.createElement('p');
-            let a = document.createElement('a');
+    //         let p = document.createElement('p');
+    //         let a = document.createElement('a');
 
-            a.textContent = references.text;
-            a.name = references.ref;
-            a.href = '#';
-
-
-            if (references['text without ref'] != undefined)
-              p.textContent = references['text without ref'] + ' ';
-
-            if (form.name == 'register')
-              row.className = ' text-center';
-
-            a.addEventListener('click', {
-              handleEvent() {
-                form.remove();
-                vm.requestURL = './json/' + a.name + '.json';
-                vm.buildForm(vm.requestURL);
-              }
-            });
+    //         a.textContent = references.text;
+    //         a.name = references.ref;
+    //         a.href = '#';
 
 
-            if (references.input != undefined) {
-              p.remove();
-              let wrapper = vm.buildWrapper(references);
-              wrapper.append(vm.buildInput(references, i));
-              row.className = 'pl-4';
-              form.append(wrapper);
-            } else if (form.name == 'login') {
-              let col = document.createElement('div');
-              col.className = 'col-12 col-sm-5';
-              p.className = 'ref' + i;
-              p.append(a);
-              col.append(p);
-              row.append(col);
-            } else {
-              p.append(a);
-              row.append(p);
-            }
-          });
-          form.append(row);
+    //         if (references['text without ref'] != undefined)
+    //           p.textContent = references['text without ref'] + ' ';
 
-        }
-      },
-      buildDatalist(fields, i, colorfield) {
+    //         if (form.name == 'register')
+    //           row.className = ' text-center';
 
-        let datalist = document.createElement('datalist');
+    //         a.addEventListener('click', {
+    //           handleEvent() {
+    //             form.remove();
+    //             vm.requestURL = './json/' + a.name + '.json';
+    //             vm.buildForm(vm.requestURL);
+    //           }
+    //         });
 
-        colorfield.setAttribute('list', 'colorlist' + i);
-        colorfield.removeAttribute('placeholder');
-        datalist.id = 'colorlist' + i;
 
-        for (let key of fields.input.colors) {
-          let option = document.createElement('option');
-          option.value = key;
-          datalist.append(option);
-        }
+    //         if (references.input != undefined) {
+    //           p.remove();
+    //           let wrapper = vm.buildWrapper(references);
+    //           wrapper.append(vm.buildInput(references, i));
+    //           row.className = 'pl-4';
+    //           form.append(wrapper);
+    //         } else if (form.name == 'login') {
+    //           let col = document.createElement('div');
+    //           col.className = 'col-12 col-sm-5';
+    //           p.className = 'ref' + i;
+    //           p.append(a);
+    //           col.append(p);
+    //           row.append(col);
+    //         } else {
+    //           p.append(a);
+    //           row.append(p);
+    //         }
+    //       });
+    //       form.append(row);
 
-        colorfield.append(datalist);
-        return colorfield;
+    //     }
+    //   },
+    //   buildDatalist(fields, i, colorfield) {
 
-      },
-      changeColor(event) {
+    //     let datalist = document.createElement('datalist');
 
-        let body = document.querySelector('body');
-        let checkbox = document.querySelector('.check');
-        body.style.color = event.target.value;
-        checkbox.checked = false;
+    //     colorfield.setAttribute('list', 'colorlist' + i);
+    //     colorfield.removeAttribute('placeholder');
+    //     datalist.id = 'colorlist' + i;
 
-      },
-      backToDefaultColor() {
+    //     for (let key of fields.input.colors) {
+    //       let option = document.createElement('option');
+    //       option.value = key;
+    //       datalist.append(option);
+    //     }
 
-        let checkbox = document.querySelector('.check');
-        let body = document.querySelector('body');
-        //let computedStyle = getComputedStyle(document.body);
-        if (checkbox.checked) {
-          body.style.color = 'rgb(33, 37, 41)';
-          //body.style.color = computedStyle.color;
-        }
+    //     colorfield.append(datalist);
+    //     return colorfield;
 
-      },
-      buildInputFile(fields, input) {
+    //   },
+    //   changeColor(event) {
 
-        if (fields.input.type == 'file' && fields.input.filetype != undefined) {
+    //     let body = document.querySelector('body');
+    //     let checkbox = document.querySelector('.check');
+    //     body.style.color = event.target.value;
+    //     checkbox.checked = false;
 
-          input.setAttribute('multiple', fields.input.multiple)
-          input.className = 'form-control-file';
+    //   },
+    //   backToDefaultColor() {
 
-          let arr = '';
+    //     let checkbox = document.querySelector('.check');
+    //     let body = document.querySelector('body');
+    //     //let computedStyle = getComputedStyle(document.body);
+    //     if (checkbox.checked) {
+    //       body.style.color = 'rgb(33, 37, 41)';
+    //       //body.style.color = computedStyle.color;
+    //     }
 
-          fields.input.filetype.forEach(elem => {
+    //   },
+    //   buildInputFile(fields, input) {
 
-            arr += '.' + elem + ', ';
-            input.setAttribute('accept', arr);
+    //     if (fields.input.type == 'file' && fields.input.filetype != undefined) {
 
-          });
-        } else if (fields.input.type == 'file') {
-          input.className = 'form-control-file';
-        }
-        return input;
-      },
-      buildTechnology(techelem, i) {
+    //       input.setAttribute('multiple', fields.input.multiple)
+    //       input.className = 'form-control-file';
 
-        let technologies = document.createElement('input');
-        let label = document.createElement('label');
+    //       let arr = '';
 
-        technologies.type = 'checkbox';
-        technologies.id = 'option' + i;
-        technologies.setAttribute('autocomplete', 'off');
+    //       fields.input.filetype.forEach(elem => {
 
-        label.htmlFor = 'option' + i;
-        label.textContent = techelem;
-        label.className = 'btn btn-primary btn-tags';
+    //         arr += '.' + elem + ', ';
+    //         input.setAttribute('accept', arr);
 
-        label.append(technologies);
-        return label;
-      },
-      buildLink(form) {
-        let vm = this
-        let link0 = document.querySelector('#link0');
-        let link1 = document.querySelector('#link1');
-        let link2 = document.querySelector('#link2');
-        let link3 = document.querySelector('#link3');
-        let link4 = document.querySelector('#link4');
-        link0.onclick = function () {
+    //       });
+    //     } else if (fields.input.type == 'file') {
+    //       input.className = 'form-control-file';
+    //     }
+    //     return input;
+    //   },
+    //   buildTechnology(techelem, i) {
 
-          vm.requestURL = './json/signin.json';
-          form.remove();
-          vm.buildForm(vm.requestURL);
-        }
-        link1.onclick = function () {
-          vm.requestURL = './json/signup.json';
-          form.remove();
-          vm.buildForm(vm.requestURL);
+    //     let technologies = document.createElement('input');
+    //     let label = document.createElement('label');
 
-        }
-        link2.onclick = function () {
-          vm.requestURL = './json/colorsheme.json';
-          form.remove();
-          vm.buildForm(vm.requestURL);
-        }
-        link3.onclick = function () {
-          vm.requestURL = './json/addpost.json';
-          form.remove();
-          vm.buildForm(vm.requestURL);
-        }
-        link4.onclick = function () {
-          vm.requestURL = './json/interview.json';
-          form.remove();
-          vm.buildForm(vm.requestURL);
-        }
-      },
-      buildMask(jsonObj){
+    //     technologies.type = 'checkbox';
+    //     technologies.id = 'option' + i;
+    //     technologies.setAttribute('autocomplete', 'off');
 
-        jsonObj.fields.forEach(function(fields, i){
-          if(fields.input.mask != undefined){
-            let input = document.querySelector('#test' + i);
-            let im = new Inputmask(fields.input.mask)
-            input.type = 'text';
-            im.mask(input)
-          }
-        })
-      }
-    },
+    //     label.htmlFor = 'option' + i;
+    //     label.textContent = techelem;
+    //     label.className = 'btn btn-primary btn-tags';
 
-    mounted() {
-      //this.GET_JSON()
-      this.buildForm(this.requestURL)
-    }
+    //     label.append(technologies);
+    //     return label;
+    //   },
+    //   buildLink(form) {
+    //     let vm = this
+    //     let link0 = document.querySelector('#link0');
+    //     let link1 = document.querySelector('#link1');
+    //     let link2 = document.querySelector('#link2');
+    //     let link3 = document.querySelector('#link3');
+    //     let link4 = document.querySelector('#link4');
+    //     link0.onclick = function () {
+
+    //       vm.requestURL = './json/signin.json';
+    //       form.remove();
+    //       vm.buildForm(vm.requestURL);
+    //     }
+    //     link1.onclick = function () {
+    //       vm.requestURL = './json/signup.json';
+    //       form.remove();
+    //       vm.buildForm(vm.requestURL);
+
+    //     }
+    //     link2.onclick = function () {
+    //       vm.requestURL = './json/colorsheme.json';
+    //       form.remove();
+    //       vm.buildForm(vm.requestURL);
+    //     }
+    //     link3.onclick = function () {
+    //       vm.requestURL = './json/addpost.json';
+    //       form.remove();
+    //       vm.buildForm(vm.requestURL);
+    //     }
+    //     link4.onclick = function () {
+    //       vm.requestURL = './json/interview.json';
+    //       form.remove();
+    //       vm.buildForm(vm.requestURL);
+    //     }
+    //   },
+    //   buildMask(jsonObj){
+
+    //     jsonObj.fields.forEach(function(fields, i){
+    //       if(fields.input.mask != undefined){
+    //         let input = document.querySelector('#test' + i);
+    //         let im = new Inputmask(fields.input.mask)
+    //         input.type = 'text';
+    //         im.mask(input)
+    //       }
+    //     })
+    //   }
+    // },
+
+    // mounted() {
+    //   //this.GET_JSON()
+    //   this.buildForm(this.requestURL)
+    // }
   }
 </script>
 

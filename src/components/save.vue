@@ -1,7 +1,7 @@
 <template>
   <div class="save row justify-content-center">
     <div class="col-12">
-      <h1 v-if="savedData" class=" text-center">Тут пока что пусто</h1>
+      <h1 v-if="savedData.length == 0" class=" text-center">Тут пока что пусто</h1>
       <div v-else class="saved-data">
         <h1 class=" text-center">Вы ввели:</h1>
         <ul>
@@ -29,11 +29,12 @@ export default {
       }
     },
     mounted(){
-
+      console.log(this.savedData)
     }
 }
 </script>
 
-<style>
-
+<style lang="sass">
+.save
+  font-size: 24px
 </style>
