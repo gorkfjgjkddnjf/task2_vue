@@ -34,10 +34,19 @@ import Inputmask from 'inputmask'
     components: {},
 
     methods: {
+      getLabel(id){
+        let label = document.querySelectorAll('label')
+        label.forEach(element => {
+          if(id == element.htmlFor){
+            this.inputData.push(element.textContent)
+          }
+        });
+      },
       getInputData(){
         let input = document.querySelectorAll('input')
         let textarea = document.querySelector('textarea')
-        if(textarea.value != ''){
+
+        if(textarea != null && textarea.value != ''){
           this.inputData.push(textarea.value)
         }
         input.forEach(element => {
@@ -46,6 +55,9 @@ import Inputmask from 'inputmask'
           }
           if(element.value != "" && element.value != "on" && element.type != 'file'){
             this.inputData.push(element.value) 
+          }
+          if(element.checked){
+            this.getLabel(element.id)
           }
         });
       },
