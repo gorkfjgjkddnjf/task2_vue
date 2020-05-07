@@ -10,7 +10,7 @@
       <a href="#" class="btn btn-primary w-100 my-2" id="link3">addpost.json</a>
       <a href="#" class="btn btn-primary w-100 my-2" id="link4">interview.json</a>
 
-      <router-link :to="{name:'save', params: {savedData: inputData, labelData: labelData}}">
+      <router-link :to="{name:'save', params: {savedData: inputData, checkData: checkData}}">
         <a href="#" class="btn btn-primary w-100 my-2" id="link4" @click="getInputData">save</a>
       </router-link>
     </div>
@@ -38,30 +38,44 @@ import Inputmask from 'inputmask'
     methods: {
       getLabel(id){
         let label = document.querySelectorAll('label')
-        label.forEach(element => {
+        if(label.length != 0){
+          label.forEach((element) => {
           if(id == element.htmlFor && /^option/.test(element.htmlFor)){
-            this.inputData.push(element.textContent)
+            this.checkData.push({value: element.textContent})
           }
           if(id == element.htmlFor){
-            this.labelData = element.textContent
-            //Object.assign(this.labelData, {label: element.textContent})
+            this.labelData = new Object({label: element.textContent})
           }
         });
+        return true
+        }
+        else{
+          return false
+        }
       },
       getInputData(){
         let input = document.querySelectorAll('input')
         let textarea = document.querySelector('textarea')
 
         if(textarea != null && textarea.value != ''){
-          this.inputData.push(textarea.value)
+          if(this.getLabel(textarea.id)){
+            this.inputData.push(Object.assign(this.labelData,{value: textarea.value})) 
+          }
+          else{
+            this.inputData.push({value: textarea.value})
+          }
         }
         input.forEach(element => {
           if(element.type == 'file' && element.files[0] != undefined){
             this.inputData.push(element.files[0])
           }
           if(element.value != "" && element.value != "on" && element.type != 'file' && element.type != 'checkbox'){
-            this.getLabel(element.id)
-            this.inputData.push(Object.assign(this.labelData, {value: element.value})) 
+            if(this.getLabel(element.id)){
+              this.inputData.push(Object.assign(this.labelData,{value: element.value})) 
+            }
+            else{
+              this.inputData.push({value: element.value})
+            }
           }
           if(element.checked){
             this.getLabel(element.id)
