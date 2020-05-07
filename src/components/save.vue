@@ -4,17 +4,28 @@
     <div class="col-12">
       <h1 v-if="savedData.length == 0 && checkData.length == 0" class=" text-center">Тут пока что пусто</h1>
       <div v-else class="saved-data">
-        <h1 v-if="text" class="text-center">Вы ввели:</h1>
-        <ul class="ul">
-          <li v-for="data in filteredData" :key="data.id">{{data}}</li>
-        </ul> 
+        <h1 v-if="text" class=" text-center">Вы ввели:</h1>
+        <div class="row justify-content-center">
+          <div class="col-12">        
+            <div v-for="data in filteredData" :key="data.id">
+
+              <p class="p" v-if="data.label">{{data.label}}</p>
+              <p class="p" v-else>Похоже здесь не было заголовка</p>
+              <p class="p">{{data.value}}</p>
+
+
+            </div>
+          </div>
+        </div>
+
         <div v-show="image" class="col-12 image">
           <h1>Картинки, которые вы загрузили:</h1>
-        </div>   
+        </div> 
+
         <div v-if="checkData.length != 0" class="col-12 check">
           <h1>Технологии, которые вы выбрали:</h1>
-          <button class="btn btn-primary mx-2" v-for="check in checkData" :key="check.id">{{check}}</button>
-        </div>    
+          <button class="btn btn-primary mx-2" v-for="check in checkData" :key="check.id">{{check.value}}</button>
+        </div>     
       </div>
     </div>
   </div>
@@ -43,13 +54,19 @@ export default {
           return []
         } 
       }
+      // labelData: {
+      //   type: Object,
+      //   default(){
+      //     return {}
+      //   }
+      // }
     },
     methods:{
       showImage(){
         this.savedData.forEach((data, i) =>{
 
           if(data.name){
-            this.image = true 
+            this.image = true
             let img = document.createElement('img')
             let block = document.querySelector('.image')
 
@@ -82,7 +99,6 @@ export default {
       }
     },
     mounted(){
-      console.log(this.checkData)
       this.showImage()
     }
 }
@@ -91,4 +107,8 @@ export default {
 <style lang="sass">
 .save
   font-size: 24px
+
+.p
+  border-bottom: 1px solid rgba(0, 0, 0, .4)
+
 </style>
