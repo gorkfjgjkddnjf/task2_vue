@@ -4,9 +4,17 @@
       <h1 v-if="savedData.length == 0" class=" text-center">Тут пока что пусто</h1>
       <div v-else class="saved-data">
         <h1 class=" text-center">Вы ввели:</h1>
-        <ul class="ul">
-          <li v-for="data in filteredData" :key="data.id">{{data}}</li>
-        </ul> 
+        <div class="row justify-content-center">
+          <!-- <div class="col-6">
+            <p v-for="label in labelData" :key="label.id">{{label}}</p>
+          </div> -->
+
+          <div class="col-6">
+         
+            <p v-for="data in filteredData" :key="data.id">{{data.label}} -- {{data.value}}</p>
+          </div>
+        </div>
+
         <div class="col-12 image">
           
         </div>      
@@ -29,6 +37,12 @@ export default {
         default(){
           return []
         } 
+      },
+      labelData: {
+        type: Object,
+        default(){
+          return {}
+        }
       }
     },
     methods:{
@@ -67,6 +81,7 @@ export default {
     },
     mounted(){
       console.log(this.savedData)
+      console.log(this.labelData)
       this.showImage()
     }
 }
