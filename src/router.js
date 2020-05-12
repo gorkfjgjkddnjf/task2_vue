@@ -11,6 +11,7 @@ let router = new Router({
             path: '/',
             name: 'main',
             component: mainForm,
+            props: true
         },
         {
             path: '/save',

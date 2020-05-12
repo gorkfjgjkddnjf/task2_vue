@@ -1,7 +1,7 @@
 
 <template>
   <div class="save row justify-content-center">
-      <router-link :to="{name:'main', params: {inputData: filteredData}}">
+      <router-link :to="{name:'main', params: {returnedData: filteredData}}">
         <button class="btn btn-primary w-100 my-2" id="save">Back to Form</button>
       </router-link>
     <div class="col-12">
@@ -103,6 +103,7 @@ export default {
     },
     mounted(){
       this.showImage()
+      console.log(this.savedData)
     }
 }
 </script>

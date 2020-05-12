@@ -38,6 +38,14 @@ import Inputmask from 'inputmask'
         dis: true
       }
     },
+    props:{
+      returnedData:{
+        type: Array,
+        default(){
+          return []
+        }
+      }
+    },
     components: {},
     computed:{
       er(){
@@ -125,7 +133,7 @@ import Inputmask from 'inputmask'
           this.buildButtons(data, form);
           this.buildLink(form)
           mainContainer.append(form);
-
+          this.returnData(this.returnedData)
           this.buildMask(data);
           this.checkFill()
       })
@@ -387,30 +395,35 @@ import Inputmask from 'inputmask'
           vm.requestURL = './json/signin.json';
           form.remove();
           vm.errors = []
+          vm.returnedData = []
           vm.buildForm(vm.requestURL);
         }
         link1.onclick = function () {
           vm.requestURL = './json/signup.json';
           form.remove();
           vm.errors = []
+          vm.returnedData = []
           vm.buildForm(vm.requestURL);
         }
         link2.onclick = function () {
           vm.requestURL = './json/colorsheme.json';
           form.remove();
           vm.errors = []
+          vm.returnedData = []
           vm.buildForm(vm.requestURL);
         }
         link3.onclick = function () {
           vm.requestURL = './json/addpost.json';
           form.remove();
           vm.errors = []
+          vm.returnedData = []
           vm.buildForm(vm.requestURL);
         }
         link4.onclick = function () {
           vm.requestURL = './json/interview.json';
           form.remove();
           vm.errors = []
+          vm.returnedData = []
           vm.buildForm(vm.requestURL);
         }
       },
@@ -424,12 +437,21 @@ import Inputmask from 'inputmask'
             im.mask(input)
           }
         })
+      },
+      returnData(data){
+        if(data.length != 0){
+          let input = document.querySelectorAll('input')
+        for(let i = 0;i<input.length;i++){
+          input[i].value = data[i].value
+          console.log(1)
+        }
+        }
       }
     },
 
     mounted() {
       this.buildForm(this.requestURL)
-      console.log(this.inputData)
+      
     }
   }
 </script>
