@@ -1,6 +1,9 @@
 <template>
 <div  class="main-form container">
   <div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-xl-2 err">
+      <p v-for="error in er" :key="error.id">{{error}}</p>
+    </div>
     <div class="col-12 col-sm-8 col-lg-8 col-xl-6" id="main-container"></div>
 
     <div class="col-12 col-sm-4 col-lg-3 col-xl-2" id="link-json">
@@ -9,11 +12,11 @@
       <a href="#" class="btn btn-primary w-100 my-2" id="link2">colorsheme.json</a>
       <a href="#" class="btn btn-primary w-100 my-2" id="link3">addpost.json</a>
       <a href="#" class="btn btn-primary w-100 my-2" id="link4">interview.json</a>
-
       <router-link :to="{name:'save', params: {savedData: inputData, checkData: checkData}}">
-        <a href="#" class="btn btn-primary w-100 my-2" id="link4" @click="getInputData">save</a>
+        <button class="btn btn-primary w-100 my-2" id="save" :disabled="dis"  @click="getInputData">save</button>
       </router-link>
     </div>
+    <!-- <input type="text" v-model="test"> -->
   </div>
 
 </div>
@@ -21,19 +24,26 @@
 </template>
 
 <script>
-
+import validation from './mixins/validation'
 import Inputmask from 'inputmask'
   export default {
+    mixins:[validation],
     name: 'App',
     data() {
       return {
         requestURL: './json/signin.json',
         inputData: [],
-        checkData: []
+        checkData: [],
+        test: null,
+        dis: true
       }
     },
     components: {},
-
+    computed:{
+      er(){
+        return this.errors
+      }
+    },
     methods: {
       getLabel(id){
         let label = document.querySelectorAll('label')
@@ -117,6 +127,7 @@ import Inputmask from 'inputmask'
           mainContainer.append(form);
 
           this.buildMask(data);
+          this.checkFill()
       })
       .catch(err => {
         alert('WTF')
@@ -373,30 +384,33 @@ import Inputmask from 'inputmask'
         let link3 = document.querySelector('#link3');
         let link4 = document.querySelector('#link4');
         link0.onclick = function () {
-
           vm.requestURL = './json/signin.json';
           form.remove();
+          vm.errors = []
           vm.buildForm(vm.requestURL);
         }
         link1.onclick = function () {
           vm.requestURL = './json/signup.json';
           form.remove();
+          vm.errors = []
           vm.buildForm(vm.requestURL);
-
         }
         link2.onclick = function () {
           vm.requestURL = './json/colorsheme.json';
           form.remove();
+          vm.errors = []
           vm.buildForm(vm.requestURL);
         }
         link3.onclick = function () {
           vm.requestURL = './json/addpost.json';
           form.remove();
+          vm.errors = []
           vm.buildForm(vm.requestURL);
         }
         link4.onclick = function () {
           vm.requestURL = './json/interview.json';
           form.remove();
+          vm.errors = []
           vm.buildForm(vm.requestURL);
         }
       },
@@ -414,8 +428,8 @@ import Inputmask from 'inputmask'
     },
 
     mounted() {
-      //this.GET_JSON()
       this.buildForm(this.requestURL)
+      console.log(this.inputData)
     }
   }
 </script>

@@ -1,6 +1,9 @@
 
 <template>
   <div class="save row justify-content-center">
+      <router-link :to="{name:'main', params: {inputData: filteredData}}">
+        <button class="btn btn-primary w-100 my-2" id="save">Back to Form</button>
+      </router-link>
     <div class="col-12">
       <h1 v-if="savedData.length == 0 && checkData.length == 0" class=" text-center">Тут пока что пусто</h1>
       <div v-else class="saved-data">
