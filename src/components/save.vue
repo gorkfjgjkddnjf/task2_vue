@@ -1,11 +1,11 @@
 
 <template>
   <div class="save row justify-content-center">
-      <router-link :to="{name:'main', params: {returnedData: filteredData}}">
+      <router-link :to="{name:'main', params: {returnedData: filteredData, oldUrl:urlForm}}">
         <button class="btn btn-primary w-100 my-2" id="save">Back to Form</button>
       </router-link>
     <div class="col-12">
-      <h1 v-if="savedData.length == 0 && checkData.length == 0" class=" text-center">Тут пока что пусто</h1>
+      <h1 v-if="filteredData.length == 0 && checkData.length == 0" class=" text-center">Тут пока что пусто</h1>
       <div v-else class="saved-data">
         <h1 v-if="text" class=" text-center">Вы ввели:</h1>
         <div class="row justify-content-center">
@@ -15,7 +15,6 @@
               <p class="p" v-if="data.label">{{data.label}}</p>
               <p class="p" v-else>Похоже здесь не было заголовка</p>
               <p class="p">{{data.value}}</p>
-
 
             </div>
           </div>
@@ -40,6 +39,7 @@ export default {
     data(){
       return{
         filteredData: [],
+        urlForm: null,
         image: false,
         text: false
       }
@@ -56,6 +56,12 @@ export default {
         default(){
           return []
         } 
+      },
+      url:{
+        type: String,
+        default(){
+          return ''
+        }
       }
       // labelData: {
       //   type: Object,
@@ -93,7 +99,7 @@ export default {
               })
             })            
           }
-          else{
+          else if(data.value != ''){
             this.filteredData.push(data)
             this.image = false
             this.text = true
@@ -104,6 +110,7 @@ export default {
     mounted(){
       this.showImage()
       console.log(this.savedData)
+      this.urlForm = this.url
     }
 }
 </script>

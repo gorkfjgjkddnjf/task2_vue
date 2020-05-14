@@ -12,8 +12,8 @@
       <a href="#" class="btn btn-primary w-100 my-2" id="link2">colorsheme.json</a>
       <a href="#" class="btn btn-primary w-100 my-2" id="link3">addpost.json</a>
       <a href="#" class="btn btn-primary w-100 my-2" id="link4">interview.json</a>
-      <router-link :to="{name:'save', params: {savedData: inputData, checkData: checkData}}">
-        <button class="btn btn-primary w-100 my-2" id="save" :disabled="dis"  @click="getInputData">save</button>
+      <router-link :to="{name:'save', params: {savedData: inputData, checkData: checkData, url: requestURL}}">
+        <button class="btn btn-primary w-100 my-2" id="save" @click="getInputData">save</button>
       </router-link>
     </div>
     <!-- <input type="text" v-model="test"> -->
@@ -35,7 +35,8 @@ import Inputmask from 'inputmask'
         inputData: [],
         checkData: [],
         test: null,
-        dis: true
+        dis: true,
+        img: null,
       }
     },
     props:{
@@ -43,6 +44,12 @@ import Inputmask from 'inputmask'
         type: Array,
         default(){
           return []
+        }
+      },
+      oldUrl:{
+        type: String,
+        default(){
+          return ''
         }
       }
     },
@@ -77,22 +84,22 @@ import Inputmask from 'inputmask'
 
         if(textarea != null && textarea.value != ''){
           if(this.getLabel(textarea.id)){
-            this.inputData.push(Object.assign(this.labelData,{value: textarea.value})) 
+            this.inputData.push(Object.assign(this.labelData,{value: textarea.value, id: textarea.id})) 
           }
           else{
-            this.inputData.push({value: textarea.value})
+            this.inputData.push({value: textarea.value, id: textarea.id})
           }
         }
         input.forEach(element => {
           if(element.type == 'file' && element.files[0] != undefined){
             this.inputData.push(element.files[0])
           }
-          if(element.value != "" && element.value != "on" && element.type != 'file' && element.type != 'checkbox'){
+          if(element.value != "on" && element.type != 'file' && element.type != 'checkbox'){
             if(this.getLabel(element.id)){
-              this.inputData.push(Object.assign(this.labelData,{value: element.value})) 
+              this.inputData.push(Object.assign(this.labelData,{value: element.value, id: element.id})) 
             }
             else{
-              this.inputData.push({value: element.value})
+              this.inputData.push({value: element.value, id: element.id})
             }
           }
           if(element.checked){
@@ -122,7 +129,6 @@ import Inputmask from 'inputmask'
       buildForm(requestURL) {
         import(`${requestURL}`)
         .then(data =>{
-          
           let mainContainer = document.querySelector('#main-container');
           let form = document.createElement('form');
 
@@ -132,9 +138,12 @@ import Inputmask from 'inputmask'
           this.buildRef(data, form);
           this.buildButtons(data, form);
           this.buildLink(form)
+
           mainContainer.append(form);
+          console.log(this.returnedData)
           this.returnData(this.returnedData)
           this.buildMask(data);
+          this.renderPreview()
           this.checkFill()
       })
       .catch(err => {
@@ -168,7 +177,17 @@ import Inputmask from 'inputmask'
         input.type = fields.input.type;
         input.id = 'test' + i;
         if (fields.input.type == 'file') {
+          let block = document.createElement('div')
+          let preview = document.createElement('div')
+
+          preview.classList.add('preview', 'hide-preview', 'form-group')
           input.className = 'custom-file-input';
+
+          preview.append(this.buildImagePreview(i), this.buildDeleteBtn())
+          block.append(input, preview)
+
+          input.addEventListener("change", this.renderPreview)
+          return block
         }
         if (fields.input.type != 'checkbox') {
           input.className = 'form-control form-control-lg';
@@ -441,21 +460,85 @@ import Inputmask from 'inputmask'
       returnData(data){
         if(data.length != 0){
           let input = document.querySelectorAll('input')
-        for(let i = 0;i<input.length;i++){
-          input[i].value = data[i].value
-          console.log(1)
+         // let label = document.querySelectorAll('label')
+          for(let i = 0; i < input.length; i++){
+            if(input[i].type != 'color' && input[i].type != 'checkbox'){
+              console.log(input[i].id, ' - ', data[i].id)
+              if(input[i].id == data[i].id){
+                console.log(2)
+                input[i].value = data[i].value
+              }
+            }
+          }
         }
-        }
-      }
-    },
+      },
+      buildDeleteBtn(){
+        let btn = document.createElement('button')
+        btn.textContent = 'Удалить'
+        btn.className = 'btn btn-primary delete-btn mt-3 mb-5'
+        return btn
+      },
+      buildImagePreview(i){
+        this.img = document.createElement('img')
+        this.img.alt = 'preview-img'
+        this.img.id = 'img' + i
+        this.img.className = 'img-fluid'
+        return this.img
+      },
+      renderPreview(){
+        let btn = document.querySelectorAll('.delete-btn')
+        let img = document.querySelectorAll('img')
+        let input = document.querySelectorAll('.custom-file-input')
+        let label = document.querySelectorAll('.custom-file-label')
+        let preview = document.querySelectorAll('.preview')
 
+        input.forEach((element,i) =>{
+          if(element.files[0] != undefined){
+            let reader  = new FileReader();
+
+            reader.onloadend = function () {
+              img[i].src = reader.result;
+            }
+            reader.readAsDataURL(element.files[0]);
+
+            preview[i].classList.remove("hide-preview")
+            preview[i].classList.add('show-preview')
+            label[i].classList.add('hide-preview')
+            element.classList.add('hide-preview')
+            label[i].classList.remove('show-preview')
+            element.classList.remove('show-preview')
+
+            btn[i].onclick = function () {
+              element.value = null
+              preview[i].classList.remove("show-preview")
+              preview[i].classList.add('hide-preview')
+              label[i].classList.add('show-preview')
+              element.classList.add('show-preview')
+            }
+          }
+          else{
+            preview[i].classList.remove("show-preview")
+            preview[i].classList.add('hide-preview')
+            label[i].classList.add('show-preview')
+            element.classList.add('show-preview')           
+          }
+        })
+      },
+    },
     mounted() {
-      this.buildForm(this.requestURL)
-      
+      if(this.oldUrl != ''){
+        this.buildForm(this.oldUrl)
+      }else{
+        this.buildForm(this.requestURL)
+      }    
     }
   }
 </script>
 
-<style>
+<style lang="sass">
+.hide-preview
+  display: none
 
+.show-preview
+  display: block
 </style>
